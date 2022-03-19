@@ -34,15 +34,11 @@ function playRound(playerSelection, computerSelection) {
   if (playerSelection.toUpperCase() === computerSelection.toUpperCase()) {
     return `[Round: ${round}/5] It's a tie.`;
 
-  } else if (playerSelection.toUpperCase() === "PAPER" && computerSelection === "Rock") {
+  } else if ((playerSelection.toUpperCase() === "PAPER" && computerSelection === "Rock") ||
+            (playerSelection.toUpperCase() === "ROCK" && computerSelection === "Scissors") ||
+            (playerSelection.toUpperCase() === "SCISSORS" && computerSelection === "Paper")) {
     playerWon = true;
-    return `[Round: ${round}/5] You won! Paper beats Rock.`;
-  } else if (playerSelection.toUpperCase() === "ROCK" && computerSelection === "Scissors") {
-    playerWon = true;
-    return `[Round: ${round}/5] You won! Rock beats Scissors.`;
-  } else if (playerSelection.toUpperCase() === "SCISSORS" && computerSelection === "Paper") {
-    playerWon = true;
-    return `[Round: ${round}/5] You won! Scissors beats Paper.`;
+    return `[Round: ${round}/5] You won! ${playerSelection[0].toUpperCase() + playerSelection.slice(1).toLowerCase()} beats ${computerSelection}.`;
     
   } else {
     computerWon = true;
