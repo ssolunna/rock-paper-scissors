@@ -1,1 +1,5 @@
 /* style.css */
+
+html {
+  background: fixed url(backgrounds/night.jpg) no-repeat 0% 75%/cover;
+}
