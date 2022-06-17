@@ -1,5 +1,87 @@
 /* style.css */
 
+*:not(body, html) {
+  box-sizing: border-box;
+  border: 2px solid whitesmoke;
+  padding: 2px;
+  margin: 2px;
+}
+
 html {
-  background: fixed url(backgrounds/night.jpg) no-repeat 0% 75%/cover;
+  background-image: url(backgrounds/night.jpg);
+  background-size: auto 100vh;
+  background-repeat: repeat-x;
+}
+
+body {
+  margin: 0;
+  padding: 0 100px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+#header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.player-box,
+.computer-box {
+  display: flex;
+  align-items: center;
+  border: none;
+}
+
+.player,
+.computer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: none;
+}
+
+.computer{
+  order: 1;
+}
+
+.player-lives,
+.computer-lives {
+  display: flex;
+  border: none;
+}
+
+.player-choices,
+.computer-choices{
+  display: flex;
+  flex-direction: column;
+  border: none;
+}
+
+#footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.narrative-box {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  border: none;
+}
+
+.options {
+  align-self: flex-end;
+  display: flex;
+  border: none;
 }
