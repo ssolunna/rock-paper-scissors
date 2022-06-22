@@ -7,6 +7,18 @@
   margin: 2px;
 }
 
+@font-face {
+  font-family: 'pixellari';
+  src: url('fonts/pixellari.eot');
+  src: url('fonts/pixellari.eot?#iefix') format('embedded-opentype'),
+       url('fonts/pixellari.woff2') format('woff2'),
+       url('fonts/pixellari.woff') format('woff'),
+       url('fonts/pixellari.ttf') format('truetype'),
+       url('fonts/pixellari.svg#pixellarimedium') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
 html {
   background-image: url(backgrounds/night.jpg);
   background-size: auto 100vh;
@@ -14,6 +26,8 @@ html {
 }
 
 body {
+  font-family: pixellari, 'Courier New', Courier, monospace;
+  color: white;
   margin: 0;
   padding: 0 100px;
   height: 100vh;
@@ -22,10 +36,23 @@ body {
   justify-content: space-between;
 }
 
-#header {
+header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-top: 15px;
+  border: none;
+}
+
+.title {
+  margin: 0;
+  padding: 0;
+  font-size: large;
+  border: none;
+}
+
+.exit-button {
+  border: none;
 }
 
 #content {
