@@ -1,6 +1,6 @@
 /* style.css */
 
-*:not(body, html) {
+*:not(body, html, img) {
   box-sizing: border-box;
   border: 2px solid whitesmoke;
   padding: 2px;
@@ -55,16 +55,18 @@ header {
   border: none;
 }
 
-#content {
+main {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  border: none;
 }
 
 .player-box,
 .computer-box {
   display: flex;
   align-items: center;
+  gap: 50px;
   border: none;
 }
 
@@ -74,6 +76,7 @@ header {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  gap: 10px;
   border: none;
 }
 
@@ -81,17 +84,38 @@ header {
   order: 1;
 }
 
+.player-avatar,
+.computer-avatar {
+  width: 120px;
+  border: none;
+}
+
 .player-lives,
 .computer-lives {
   display: flex;
+  gap: 5px;
   border: none;
+}
+
+.heart {
+  width: 20px;
 }
 
 .player-choices,
 .computer-choices{
   display: flex;
   flex-direction: column;
+  width: 30px;
+  gap: 30px;
   border: none;
+}
+
+.player-choices > img {
+  transform: rotate(90deg);
+}
+
+.computer-choices > img {
+  transform: rotate(270deg);
 }
 
 #footer {
