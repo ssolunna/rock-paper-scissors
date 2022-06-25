@@ -1,12 +1,5 @@
 /* style.css */
 
-/* *:not(body, html, img) {
-  box-sizing: border-box;
-  border: 2px solid whitesmoke;
-  padding: 2px;
-  margin: 2px;
-} */
-
 @font-face {
   font-family: 'pixellari';
   src: url('fonts/pixellari.eot');
@@ -42,25 +35,19 @@ header {
   justify-content: space-between;
   align-items: center;
   margin-top: 15px;
-  border: none;
 }
 
 .title {
   margin: 0;
   padding: 0;
   font-size: large;
-  border: none;
-}
-
-.exit-button {
-  border: none;
 }
 
 main {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border: none;
+  margin-top: -150px;
 }
 
 .player-box,
@@ -68,7 +55,6 @@ main {
   display: flex;
   align-items: center;
   gap: 50px;
-  border: none;
 }
 
 .player,
@@ -78,7 +64,6 @@ main {
   justify-content: center;
   align-items: center;
   gap: 10px;
-  border: none;
 }
 
 .computer{
@@ -88,14 +73,12 @@ main {
 .player-avatar,
 .computer-avatar {
   width: 120px;
-  border: none;
 }
 
 .player-lives,
 .computer-lives {
   display: flex;
   gap: 5px;
-  border: none;
 }
 
 .heart {
@@ -108,7 +91,6 @@ main {
   flex-direction: column;
   width: 30px;
   gap: 30px;
-  border: none;
 }
 
 .player-choices > img {
@@ -124,7 +106,6 @@ footer {
   justify-content: center;
   align-items: center;
   gap: 50px;
-  margin-bottom: 15px;
 }
 
 .guide {
@@ -138,7 +119,6 @@ footer {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  border: none;
 }
 
 .narrative {
@@ -151,5 +131,4 @@ footer {
   align-self: flex-end;
   display: flex;
   gap: 10px;
-  border: none;
 }
