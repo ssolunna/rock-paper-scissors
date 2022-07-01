@@ -1,91 +1,27 @@
 // JavaScript
 // GAME: ROCK, PAPER, SCISSORS
 
-function computerPlay() {
-  const words = ['Rock', 'Paper', 'Scissors'];
-  let randomWord = words[Math.floor(Math.random() * 3)];
-  return randomWord
-}
+const narrative = document.querySelector('.narrative');
+const guideText = [
+      'Hello there! My name is Ropasci and I will be your guide.',
+      'Here are some things you would like to know:',
+      '- Click the left buttons to choose either rock, paper or scissors',
+      '- Click the fast forward button to make me speak faster',
+      '- Click the next button to continue when I finish speaking',
+      '- Click the exit button to end the game'
+];
+                  
+type(guideText[0]);
 
-// Gets and validates input from the user
-function playerPlay() {
-  let tries = 0;
-
-  while (true) {
-    tries += 1;
-    playerSelection = prompt("Rock, Paper or Scissors?");
-
-    if (choices.test(playerSelection)) {
-      return playerSelection;
-    } else if (tries == 3) {
-      console.log("[Tries: 3/3] Too many wrong tries. Game canceled.");
-      break;
-    } else if (playerSelection === null) {
-      console.log("Game canceled.");
-      break;
-    }
-    
-    console.log(`[Tries: ${tries}/3] Please type either rock, paper or scissors.`);
-  }
-}
-
-// Plays a single round of the game
-function playRound(playerSelection, computerSelection) {
-  if (playerSelection.toUpperCase() === computerSelection.toUpperCase()) {
-    return `[Round: ${round}/5] It's a tie.`;
-
-  } else if ((playerSelection.toUpperCase() === "PAPER" && computerSelection === "Rock") ||
-            (playerSelection.toUpperCase() === "ROCK" && computerSelection === "Scissors") ||
-            (playerSelection.toUpperCase() === "SCISSORS" && computerSelection === "Paper")) {
-    playerWon = true;
-    return `[Round: ${round}/5] You won! ${playerSelection[0].toUpperCase() + playerSelection.slice(1).toLowerCase()} beats ${computerSelection}.`;
-    
-  } else {
-    computerWon = true;
-    return `[Round: ${round}/5] You lose! ${computerSelection} beats ${playerSelection[0].toUpperCase() + playerSelection.slice(1).toLowerCase()}.`;
-  }
-}
-
-function playGame() {
-  let playerScore = 0;
-  let computerScore = 0;
-  
-  for (let i = 0; i < 5; i++) {
-    const playerSelection = playerPlay();
-
-    // Cancels the game if the user inputs anything other than ‘Rock’, ‘Paper’ or ‘Scissors’
-    if (!choices.test(playerSelection)) break;
-
-    const computerSelection = computerPlay();
-    round += 1;
-    playRound(playerSelection, computerSelection);
-    console.log(playRound(playerSelection, computerSelection));
-    
-    // Keeps the score
-    if (playerWon) {
-      playerScore += 1;
-      playerWon = false;
-    } else if (computerWon) {
-      computerScore += 1;
-      computerWon = false;
-    } 
-
-    // Shows the final result after 5 rounds
-    if (i === 4) {
-      if (playerScore > computerScore) {
-        return "Congratulations! You are the winner."
-      } else if (playerScore < computerScore) {
-        return "Game over. You are the loser."
-      } else {
-        return "The game endend in a tie."
-      }
+function type(text) {
+  let i = 0;
+  typeWriter();
+  function typeWriter() {
+    if (i < text.length) {
+      narrative.textContent += text.charAt(i);
+      i++;
+      setTimeout(typeWriter, 100);
     }
   }
 }
 
-const choices = /^(Rock|Paper|Scissors)$/i;
-let round = 0;
-let playerWon = false;
-let computerWon = false;
-
-console.log(playGame());
