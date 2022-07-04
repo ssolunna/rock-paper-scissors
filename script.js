@@ -10,18 +10,27 @@ const guideText = [
       '- Click the next button to continue when I finish speaking',
       '- Click the exit button to end the game'
 ];
+const fastForward = document.querySelector('.fastforward-button');
                   
+let fastForward_clicked = false;
+fastForward.addEventListener('click', () => {
+  fastForward_clicked = true;
+})
+
 type(guideText[0]);
 
 function type(text) {
   let i = 0;
-  typeWriter();
-  function typeWriter() {
+  (function typeWriter() {
     if (i < text.length) {
       narrative.textContent += text.charAt(i);
       i++;
-      setTimeout(typeWriter, 100);
+      if (fastForward_clicked == true) {
+        setTimeout(typeWriter, 0);
+      } else {
+        setTimeout(typeWriter, 100);
+      }
     }
-  }
+  })();
 }
 
