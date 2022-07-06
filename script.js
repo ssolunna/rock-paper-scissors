@@ -11,26 +11,38 @@ const guideText = [
       '- Click the exit button to end the game'
 ];
 const fastForward = document.querySelector('.fastforward-button');
-                  
+const next = document.querySelector('.next-button');
 let fastForward_clicked = false;
+                  
 fastForward.addEventListener('click', () => {
   fastForward_clicked = true;
-})
+});
 
 type(guideText[0]);
 
 function type(text) {
   let i = 0;
+  narrative.textContent = '';
+  fastForward_clicked = false;
   (function typeWriter() {
     if (i < text.length) {
       narrative.textContent += text.charAt(i);
-      i++;
       if (fastForward_clicked == true) {
         setTimeout(typeWriter, 0);
       } else {
         setTimeout(typeWriter, 100);
       }
     }
+    if (i == text.length) {
+      next.addEventListener('click', typeNextText);
+    }
+    i++;
   })();
 }
+
+let typeNextText = () => { 
+  next.removeEventListener('click', typeNextText); 
+  type(guideText[1]); 
+};
+
 
