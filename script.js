@@ -20,24 +20,40 @@ fastForward.addEventListener('click', () => {
 
 type(guideText[0]);
 
-function type(text) {
+function type(text, cb, buttons = 'disabled') {
   let i = 0;
   narrative.textContent = '';
   fastForward_clicked = false;
-  (function typeWriter() {
-    if (i < text.length) {
-      narrative.textContent += text.charAt(i);
-      if (fastForward_clicked == true) {
-        setTimeout(typeWriter, 0);
-      } else {
-        setTimeout(typeWriter, 100);
-      }
-    }
-    if (i == text.length) {
-      next.addEventListener('click', typeNextText);
-    }
-    i++;
-  })();
+  switch (buttons) {
+    case 'disabled':
+      (function typeWriter() {
+        if (i < text.length) {
+          narrative.textContent += text.charAt(i);
+          setTimeout(typeWriter, 100);
+        }
+        if (i == text.length) {
+          cb();
+        }
+        i++;
+      })();
+      break;
+    case 'enabled':
+      (function typeWriter() {
+        if (i < text.length) {
+          narrative.textContent += text.charAt(i);
+          if (fastForward_clicked == true) {
+            setTimeout(typeWriter, 0);
+          } else {
+            setTimeout(typeWriter, 100);
+          }
+        }
+        if (i == text.length) {
+          next.addEventListener('click', typeNextText);
+        }
+        i++;
+      })();
+      break;
+  }
 }
 
 let typeNextText = () => { 
