@@ -10,6 +10,7 @@ const guideText = [
       '- Click the next button to continue when I finish speaking',
       '- Click the exit button to end the game'
 ];
+let introduction = guideText.slice(0,6);
 const fastForward = document.querySelector('.fastforward-button');
 const next = document.querySelector('.next-button');
 let fastForward_clicked = false;
@@ -18,7 +19,18 @@ fastForward.addEventListener('click', () => {
   fastForward_clicked = true;
 });
 
-type(guideText[0]);
+let j = 0;
+typeIntroduction();
+
+function typeIntroduction() {
+  if (j < introduction.length) {
+    setTimeout(() => {
+      type(introduction[j], typeIntroduction)
+      j++
+    }, j * 2000);
+  }
+}
+
 
 function type(text, cb, buttons = 'disabled') {
   let i = 0;
