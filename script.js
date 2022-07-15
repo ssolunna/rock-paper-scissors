@@ -13,24 +13,74 @@ const guideText = [
 let introduction = guideText.slice(0,6);
 const fastForward = document.querySelector('.fastforward-button');
 const next = document.querySelector('.next-button');
+const choices = document.querySelector('.player-choices');
+const exit = document.querySelector('.exit-button');
 let fastForward_clicked = false;
+let j = 0;
                   
+typeIntroduction();
+
 fastForward.addEventListener('click', () => {
   fastForward_clicked = true;
 });
 
-let j = 0;
-typeIntroduction();
-
 function typeIntroduction() {
-  if (j < introduction.length) {
+  if (j == 0) {
+    setTimeout(() => {
+      type(introduction[0], typeIntroduction)
+      j++
+    }, 0);
+  }
+  if (j > 0 && j < introduction.length) {
     setTimeout(() => {
       type(introduction[j], typeIntroduction)
+      flashButton();
       j++
-    }, j * 2000);
+    }, 3 * 1000);
+  }
+  if (j == introduction.length) {
+    setTimeout(() => {
+      stopFlash(exit);
+    }, 3 * 1000);
   }
 }
 
+function flashButton() {
+  switch (introduction[j]) {
+    case introduction[2]:
+      flash(choices);
+      break;
+    
+    case introduction[3]:
+      stopFlash(choices);
+      flash(fastForward);
+      break;
+    
+    case introduction[4]:
+      stopFlash(fastForward);
+      flash(next);
+      break;  
+    
+    case introduction[5]:
+      stopFlash(next);
+      flash(exit);
+      break;
+    
+    default:
+      break;
+  }
+}
+
+function flash(button) {
+  intervalId = setInterval(() => {
+    button.classList.toggle('hidden');
+  }, 500);
+}
+
+function stopFlash(button) {
+  clearInterval(intervalId);
+  button.classList.remove('hidden');
+}
 
 function type(text, cb, buttons = 'disabled') {
   let i = 0;
@@ -49,6 +99,7 @@ function type(text, cb, buttons = 'disabled') {
         i++;
       })();
       break;
+    
     case 'enabled':
       (function typeWriter() {
         if (i < text.length) {
