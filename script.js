@@ -121,6 +121,11 @@ function type(text, cb, narrativeButtons = 'disable') {
         if (i == text.length) {
           if (guideText.indexOf(text) <= 9) {  // 9 = End of introductory text
             next.addEventListener('click', typeNextText);
+            timeoutID = setTimeout(() => {
+              flash(next);
+              next.onmouseenter = () => stopFlash(next);
+              next.onmouseleave = () => flash(next);
+            }, 5 * 1000);
           }
         }
         i++;
@@ -131,6 +136,10 @@ function type(text, cb, narrativeButtons = 'disable') {
 
 let typeNextText = () => { 
   next.removeEventListener('click', typeNextText);
+  stopFlash(next);
+  next.onmouseenter = null;
+  next.onmouseleave = null;
+  clearTimeout(timeoutID);
   el++
   type(guideText[el], 'none', 'enable'); 
 };
