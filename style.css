@@ -114,7 +114,7 @@ footer {
 }
 
 .narrative-box {
-  width: 700px;
+  width: 550px;
   height: 70px;
   display: flex;
   flex-direction: column;
@@ -122,12 +122,13 @@ footer {
 }
 
 .narrative {
+  width: 500px;
   margin: 0;
   padding: 0;
   font-size: medium;
 }
 
-.options {
+.narrative-buttons {
   align-self: flex-end;
   display: flex;
   gap: 10px;
