@@ -17,35 +17,42 @@ const guideText = [
       // End of introductory text
       'Choose rock, paper or scissors by clicking the corresponding button'
 ];
-let halfIntroduction = guideText.slice(0,6);
+const halfIntro = guideText.slice(0,6);
 const fastForward = document.querySelector('.fastforward-button');
 const next = document.querySelector('.next-button');
 const choices = document.querySelector('.player-choices');
 const exit = document.querySelector('.exit-button');
 let fastForward_clicked = false;
 let el = 0; // Keep track of guideText's elements
-                  
-typeIntroduction();
 
-fastForward.addEventListener('click', () => {
-  fastForward_clicked = true;
-});
+
+function displaySkipIntro() {
+  const body = document.querySelector('body');
+  const header = document.querySelector('header');
+  const skipIntro = document.createElement('button');
+  skipIntro.textContent = 'Skip introduction';
+  skipIntro.setAttribute('class', 'skip-intro');
+  body.insertBefore(skipIntro, header);
+}
+
+typeIntroduction();
 
 function typeIntroduction(cb) {
   if (el == 0) {
     setTimeout(() => {
       type(guideText[el], typeIntroduction)
       el++
+      setTimeout(() => { displaySkipIntro(); }, 1 * 1000);
     }, 0);
   }
-  if (el > 0 && el < halfIntroduction.length) {
+  if (el > 0 && el < halfIntro.length) {
     setTimeout(() => {
       type(guideText[el], typeIntroduction)
       flashButton();
       el++
     }, 3 * 1000);
   }
-  if (el == halfIntroduction.length) {
+  if (el == halfIntro.length) {
     setTimeout(() => {
       stopFlash(exit);
       cb(guideText[el], 'none', 'enable');
@@ -89,6 +96,8 @@ function stopFlash(button) {
   clearInterval(intervalId);
   button.classList.remove('hidden');
 }
+
+fastForward.addEventListener('click', () => fastForward_clicked = true);
 
 function type(text, cb, narrativeButtons = 'disable') {
   let i = 0;
