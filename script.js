@@ -15,27 +15,33 @@ const guideText = [
       "- And in case you didn't already know: rock beats scissors, scissors beats paper and paper beats rock",
       "That's all. Let's play!",
       // End of introductory text
-      'Choose rock, paper or scissors by clicking the corresponding button'
+      'Choose rock, paper or scissors.'
 ];
 const halfIntro = guideText.slice(0,6);
 const fastForward = document.querySelector('.fastforward-button');
 const next = document.querySelector('.next-button');
 const choices = document.querySelector('.player-choices');
 const exit = document.querySelector('.exit-button');
+const body = document.querySelector('body');
+const header = document.querySelector('header');
+const skipIntro = document.createElement('button');
 let fastForward_clicked = false;
+let skipIntro_clicked = false;
 let el = 0; // Keep track of guideText's elements
 
+typeIntroduction();
 
 function displaySkipIntro() {
-  const body = document.querySelector('body');
-  const header = document.querySelector('header');
-  const skipIntro = document.createElement('button');
   skipIntro.textContent = 'Skip introduction';
   skipIntro.setAttribute('class', 'skip-intro');
   body.insertBefore(skipIntro, header);
+  skipIntro.addEventListener('click', () => skipIntro_clicked = true);
 }
 
-typeIntroduction();
+function hideSkipIntro() {
+  skipIntro_clicked = false;
+  skipIntro.classList.add('hidden');
+}
 
 function typeIntroduction(cb) {
   if (el == 0) {
@@ -50,13 +56,14 @@ function typeIntroduction(cb) {
       type(guideText[el], typeIntroduction)
       flashButton();
       el++
-    }, 3 * 1000);
+    }, 0 * 1000);
   }
   if (el == halfIntro.length) {
     setTimeout(() => {
       stopFlash(exit);
       cb(guideText[el], 'none', 'enable');
-    }, 3 * 1000);
+      hideSkipIntro();
+    }, 0 * 1000);
   }
 }
 
@@ -106,14 +113,19 @@ function type(text, cb, narrativeButtons = 'disable') {
   switch (narrativeButtons) {
     case 'disable':
       (function typeWriter() {
-        if (i < text.length) {
-          narrative.textContent += text.charAt(i);
-          setTimeout(typeWriter, 100);
+        if (skipIntro_clicked) {
+          hideSkipIntro();
+          type(guideText[10], 'none');
+        } else {
+          if (i < text.length) {
+            narrative.textContent += text.charAt(i);
+            setTimeout(typeWriter, 100);
+          }
+          if (i == text.length) {
+            if (cb !== 'none') { cb(type); }
+          }
+          i++;
         }
-        if (i == text.length) {
-          cb(type);
-        }
-        i++;
       })();
       break;
     
