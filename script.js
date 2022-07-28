@@ -27,6 +27,7 @@ const header = document.querySelector('header');
 const skipIntro = document.createElement('button');
 let fastForward_clicked = false;
 let skipIntro_clicked = false;
+let timeoutId;
 let el = 0; // Keep track of guideText's elements
 
 typeIntroduction();
@@ -35,11 +36,19 @@ function displaySkipIntro() {
   skipIntro.textContent = 'Skip introduction';
   skipIntro.setAttribute('class', 'skip-intro');
   body.insertBefore(skipIntro, header);
-  skipIntro.addEventListener('click', () => skipIntro_clicked = true);
+  skipIntro.addEventListener('click', () => {
+    skipIntro_clicked = true;
+    if (timeoutId && narrative.textContent == guideText[el - 1]) {
+      type(guideText[10], 'none');
+      hideSkipIntro();
+      clearTimeout(timeoutId);
+      timeoutId = null;
+    }
+  });
 }
 
 function hideSkipIntro() {
-  skipIntro_clicked = false;
+  if (skipIntro_clicked) { skipIntro_clicked = false; }
   skipIntro.classList.add('hidden');
 }
 
@@ -48,22 +57,22 @@ function typeIntroduction(cb) {
     setTimeout(() => {
       type(guideText[el], typeIntroduction)
       el++
-      setTimeout(() => { displaySkipIntro(); }, 1 * 1000);
+      setTimeout(displaySkipIntro, 1 * 1000);
     }, 0);
   }
   if (el > 0 && el < halfIntro.length) {
-    setTimeout(() => {
+    timeoutId = setTimeout(() => {
       type(guideText[el], typeIntroduction)
       flashButton();
       el++
-    }, 0 * 1000);
+    }, 3 * 1000);
   }
   if (el == halfIntro.length) {
     setTimeout(() => {
       stopFlash(exit);
       cb(guideText[el], 'none', 'enable');
       hideSkipIntro();
-    }, 0 * 1000);
+    }, 3 * 1000);
   }
 }
 
@@ -142,7 +151,7 @@ function type(text, cb, narrativeButtons = 'disable') {
         if (i == text.length) {
           if (guideText.indexOf(text) <= 9) {  // 9 = End of introductory text
             next.addEventListener('click', typeNextText);
-            timeoutID = setTimeout(() => {
+            timeoutId = setTimeout(() => {
               flash(next);
               next.onmouseenter = () => stopFlash(next);
               next.onmouseleave = () => flash(next);
@@ -160,7 +169,7 @@ let typeNextText = () => {
   stopFlash(next);
   next.onmouseenter = null;
   next.onmouseleave = null;
-  clearTimeout(timeoutID);
+  clearTimeout(timeoutId);
   el++
   type(guideText[el], 'none', 'enable'); 
 };
