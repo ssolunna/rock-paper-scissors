@@ -30,7 +30,19 @@ let skipIntro_clicked = false;
 let timeoutId;
 let el = 0; // Keep track of guideText's elements
 
-typeIntroduction();
+const playerRock = document.querySelector('.player-choices > .rock');
+playerRock.addEventListener('click', (e) => {
+  const main = document.querySelector('main');
+  const computerBox = document.querySelector('.computer-box');
+  const div = document.createElement('div');
+  main.insertBefore(div, computerBox);
+  let rock = e.target.cloneNode();
+  rock.classList.add('choice');
+  div.appendChild(rock);
+  e.target.classList.add('hidden');
+});
+
+// typeIntroduction();
 
 function displaySkipIntro() {
   skipIntro.textContent = 'Skip introduction';

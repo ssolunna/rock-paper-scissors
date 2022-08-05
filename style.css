@@ -89,17 +89,24 @@ main {
 .computer-choices{
   display: flex;
   flex-direction: column;
-  width: 30px;
   gap: 30px;
 }
 
 .player-choices > img {
   transform: rotate(90deg);
+  width: 30px;
 }
 
 .computer-choices > img {
   transform: rotate(270deg);
+  width: 30px;
 }
+
+.choice {
+  transform: rotate(90deg);
+  width: 30px;
+}
+
 
 footer {
   display: flex;
