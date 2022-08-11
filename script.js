@@ -20,7 +20,7 @@ const guideText = [
 const halfIntro = guideText.slice(0,6);
 const fastForward = document.querySelector('.fastforward-button');
 const next = document.querySelector('.next-button');
-const choices = document.querySelector('.player-choices');
+const playerChoices = document.querySelector('.player-choices');
 const exit = document.querySelector('.exit-button');
 const body = document.querySelector('body');
 const header = document.querySelector('header');
@@ -29,18 +29,33 @@ let fastForward_clicked = false;
 let skipIntro_clicked = false;
 let timeoutId;
 let el = 0; // Keep track of guideText's elements
+const choices = document.querySelectorAll('.rps');
+const main = document.querySelector('main');
+const computerBox = document.querySelector('.computer-box');
+const selectionBox = document.createElement('div');
+main.insertBefore(selectionBox, computerBox);
+let playerSelection;
+let playerChoice;
 
-const playerRock = document.querySelector('.player-choices > .rock');
-playerRock.addEventListener('click', (e) => {
-  const main = document.querySelector('main');
-  const computerBox = document.querySelector('.computer-box');
-  const div = document.createElement('div');
-  main.insertBefore(div, computerBox);
-  let rock = e.target.cloneNode();
-  rock.classList.add('choice');
-  div.appendChild(rock);
+selectChoice(playerPlay);
+
+function selectChoice(cb) {
+  choices.forEach((choice) => {
+    choice.onclick = (e) => {
+      playerSelection = e.target.cloneNode();
+      cb(e);
+    };
+  });
+}
+
+function playerPlay(e) {
+  choices.forEach((choice) => choice.onclick = null);
+  playerSelection.classList.add('chosen');
+  selectionBox.appendChild(playerSelection);
   e.target.classList.add('hidden');
-});
+  playerChoice = playerSelection.classList[0];
+  return playerChoice;
+}
 
 // typeIntroduction();
 
@@ -91,11 +106,11 @@ function typeIntroduction(cb) {
 function flashButton() {
   switch (guideText[el]) {
     case guideText[2]:
-      flash(choices);
+      flash(playerChoices);
       break;
     
     case guideText[3]:
-      stopFlash(choices);
+      stopFlash(playerChoices);
       flash(fastForward);
       break;
     
