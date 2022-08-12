@@ -30,14 +30,24 @@ let skipIntro_clicked = false;
 let timeoutId;
 let el = 0; // Keep track of guideText's elements
 const choices = document.querySelectorAll('.rps');
-const main = document.querySelector('main');
 const computerBox = document.querySelector('.computer-box');
-const selectionBox = document.createElement('div');
-main.insertBefore(selectionBox, computerBox);
 let playerSelection;
 let playerChoice;
+let computerChoice;
 
 selectChoice(playerPlay);
+
+function computerPlay() {
+  const words = ['rock', 'paper', 'scissors'];
+  let randomChoice = words[Math.floor(Math.random() * 3)];
+  let choice = document.querySelector(`.computer-choices>.${randomChoice}`);
+  computerChoice = choice.cloneNode();
+  computerChoice.classList.add('selected');
+  computerChoice.style.cssText = "transform: rotate(270deg);";
+  computerBox.before(computerChoice);
+  choice.classList.add('hidden');
+  return randomChoice;
+}
 
 function selectChoice(cb) {
   choices.forEach((choice) => {
@@ -50,10 +60,11 @@ function selectChoice(cb) {
 
 function playerPlay(e) {
   choices.forEach((choice) => choice.onclick = null);
-  playerSelection.classList.add('chosen');
-  selectionBox.appendChild(playerSelection);
+  playerSelection.classList.add('selected');
+  computerBox.before(playerSelection);
   e.target.classList.add('hidden');
   playerChoice = playerSelection.classList[0];
+  computerPlay();
   return playerChoice;
 }
 

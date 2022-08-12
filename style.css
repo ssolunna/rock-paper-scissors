@@ -102,7 +102,7 @@ main {
   width: 30px;
 }
 
-.chosen {
+.selected {
   transform: rotate(90deg);
   width: 30px;
 }
