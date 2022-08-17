@@ -33,25 +33,22 @@ const choices = document.querySelectorAll('.rps');
 const computerBox = document.querySelector('.computer-box');
 let playerSelection;
 let playerChoice;
+let computerSelection;
 let computerChoice;
+let round = 1;
 
-selectChoice(playerPlay);
+playRound();
 
-function computerPlay() {
-  const words = ['rock', 'paper', 'scissors'];
-  let randomChoice = words[Math.floor(Math.random() * 3)];
-  let choice = document.querySelector(`.computer-choices>.${randomChoice}`);
-  computerChoice = choice.cloneNode();
-  computerChoice.classList.add('selected');
-  computerChoice.style.cssText = "transform: rotate(270deg);";
-  computerBox.before(computerChoice);
-  choice.classList.add('hidden');
-  return randomChoice;
+function playRound() {
+  if (round <= 5) {
+    selectChoice(playerPlay);
+  }
 }
 
 function selectChoice(cb) {
   choices.forEach((choice) => {
     choice.onclick = (e) => {
+      if (playerSelection) { clearSelection(); };
       playerSelection = e.target.cloneNode();
       cb(e);
     };
@@ -66,6 +63,29 @@ function playerPlay(e) {
   playerChoice = playerSelection.classList[0];
   computerPlay();
   return playerChoice;
+}
+
+function computerPlay() {
+  const words = ['rock', 'paper', 'scissors'];
+  computerChoice = words[Math.floor(Math.random() * 3)];
+  let choice = document.querySelector(`.computer-choices>.${computerChoice}`);
+  computerSelection = choice.cloneNode();
+  computerSelection.classList.add('selected');
+  computerSelection.style.cssText = "transform: rotate(270deg);";
+  computerBox.before(computerSelection);
+  choice.classList.add('hidden');
+  round++;
+  playRound();
+  return computerChoice;
+}
+
+function clearSelection() {
+  playerSelection.remove();
+  computerSelection.remove();
+  let selections = document.querySelectorAll('.hidden');
+  selections.forEach(selection => {
+    selection.classList.remove('hidden');
+  });
 }
 
 // typeIntroduction();
