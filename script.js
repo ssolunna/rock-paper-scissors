@@ -32,6 +32,7 @@ let intervalId;
 let el = 0; // Keep track of guideText's elements
 const choices = document.querySelectorAll('.rps');
 const computerBox = document.querySelector('.computer-box');
+const playerBox = document.querySelector('.player-box');
 let playerSelection;
 let playerChoice;
 let computerSelection;
@@ -57,8 +58,8 @@ function playGame() {
 function playRound() {
   narrative.textContent = '';
   round++;
-  (playerScore == 5) ? console.log('Game over.') :
-  (computerScore == 5) ? console.log('Game over.') :
+  (playerScore == 5) ? playerWon() :
+  (computerScore == 5) ? computerWon() :
   selectChoice();
 }
 
@@ -113,15 +114,24 @@ function checkWinner(playerChoice, computerChoice) {
     if (computerWin) {
       stopFlash(playerLifes[5 - computerScore]);
       playerLifes[5 - computerScore].classList.add('dimmed');
-      if (computerScore == 5) { playerAvatar.classList.add('dimmed'); };
+      if (computerScore == 5) {
+        playerLifes.forEach(life => {
+          life.classList.remove('dimmed');
+        });
+      };
 
     } else if (playerWin) {
       stopFlash(computerLifes[playerScore - 1]);
       computerLifes[playerScore - 1].classList.add('dimmed');
-      if (playerScore == 5) { computerAvatar.classList.add('dimmed'); };
+      if (playerScore == 5) {
+        computerLifes.forEach(life => {
+          life.classList.remove('dimmed');
+        });
+      };
     }
+
     clearSelection();
-  }, 3 * 1000);
+  }, 2 * 1000);
 }
 
 function clearSelection() {
@@ -134,6 +144,22 @@ function clearSelection() {
     selection.classList.remove('hidden');
   });
   playRound();
+}
+
+function playerWon() {
+  computerBox.classList.add('dimmed');
+  const winner = document.createElement('div');
+  winner.textContent = 'PLAYER WON';
+  computerBox.before(winner);
+  narrative.textContent = 'Congratulations! You are the winner.';
+}
+
+function computerWon() {
+  playerBox.classList.add('dimmed');
+  const winner = document.createElement('div');
+  winner.textContent = 'COMPUTER WON';
+  computerBox.before(winner);
+  narrative.textContent = 'Game over. You are the loser.';
 }
 
 // typeIntroduction();
