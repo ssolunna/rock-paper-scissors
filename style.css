@@ -75,8 +75,8 @@ main {
   width: 120px;
 }
 
-.player-lives,
-.computer-lives {
+.player-lifes,
+.computer-lifes {
   display: flex;
   gap: 5px;
 }
@@ -143,6 +143,10 @@ footer {
 
 .hidden {
   visibility: hidden;
+}
+
+.dimmed {
+  opacity: 0.3;
 }
 
 .skip-intro {

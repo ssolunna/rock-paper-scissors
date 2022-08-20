@@ -28,6 +28,7 @@ const skipIntro = document.createElement('button');
 let fastForward_clicked = false;
 let skipIntro_clicked = false;
 let timeoutId;
+let intervalId;
 let el = 0; // Keep track of guideText's elements
 const choices = document.querySelectorAll('.rps');
 const computerBox = document.querySelector('.computer-box');
@@ -38,6 +39,12 @@ let computerChoice;
 let round = 1;
 let playerScore = 0;
 let computerScore = 0;
+const playerLifes = document.querySelectorAll('.player-lifes>.heart');
+const computerLifes = document.querySelectorAll('.computer-lifes>.heart');
+const playerAvatar = document.querySelector('.player-avatar');
+const computerAvatar = document.querySelector('.computer-avatar');
+let playerWon = false;
+let computerWon = false;
 
 playRound();
 
@@ -83,21 +90,35 @@ function checkWinner(playerChoice, computerChoice) {
 
   } else if ((playerChoice === "paper" && computerChoice === "rock") || (playerChoice === "rock" && computerChoice === "scissors") || (playerChoice === "scissors" && computerChoice === "paper")) {
     playerScore++;
-    console.log(`[Round: ${round}] You won! ${playerChoice} beats ${computerChoice}.`);
+    playerWon = true;
+    flash(computerLifes[playerScore - 1]);
 
   } else {
     computerScore++;
-    console.log(`[Round: ${round}] You lose! ${computerChoice} beats ${playerChoice}.`);
+    computerWon = true;
+    flash(playerLifes[5 - computerScore]);
   }
   round++;
-  console.log(`player: ${playerScore}, computer: ${computerScore}`);
   setTimeout(() => {
+    if (computerWon) {
+      stopFlash(playerLifes[5 - computerScore]);
+      playerLifes[5 - computerScore].classList.add('dimmed');
+      if (computerScore == 5) { playerAvatar.classList.add('dimmed'); };
+
+    } else if (playerWon) {
+      stopFlash(computerLifes[playerScore - 1]);
+      computerLifes[playerScore - 1].classList.add('dimmed');
+      if (playerScore == 5) { computerAvatar.classList.add('dimmed'); };
+    }
+
     clearSelection();
     playRound();
   }, 3 * 1000);
 }
 
 function clearSelection() {
+  playerWon = false;
+  computerWon = false;
   playerSelection.remove();
   computerSelection.remove();
   let selections = document.querySelectorAll('.hidden');
