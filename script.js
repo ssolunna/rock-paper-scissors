@@ -36,19 +36,27 @@ let playerSelection;
 let playerChoice;
 let computerSelection;
 let computerChoice;
-let round = 1;
+let round = 0;
 let playerScore = 0;
 let computerScore = 0;
 const playerLifes = document.querySelectorAll('.player-lifes>.heart');
 const computerLifes = document.querySelectorAll('.computer-lifes>.heart');
 const playerAvatar = document.querySelector('.player-avatar');
 const computerAvatar = document.querySelector('.computer-avatar');
-let playerWon = false;
-let computerWon = false;
+let playerWin = false;
+let computerWin = false;
 
-playRound();
+playGame();
+
+function playGame() {
+  playRound();
+  next.classList.add('dimmed');
+  fastForward.classList.add('dimmed');
+}
 
 function playRound() {
+  narrative.textContent = '';
+  round++;
   (playerScore == 5) ? console.log('Game over.') :
   (computerScore == 5) ? console.log('Game over.') :
   selectChoice();
@@ -86,45 +94,46 @@ function computerPlay() {
 
 function checkWinner(playerChoice, computerChoice) {
   if (playerChoice === computerChoice) {
-    console.log(`[Round: ${round}] It's a tie.`);
+    narrative.textContent = "Tie!";
 
   } else if ((playerChoice === "paper" && computerChoice === "rock") || (playerChoice === "rock" && computerChoice === "scissors") || (playerChoice === "scissors" && computerChoice === "paper")) {
     playerScore++;
-    playerWon = true;
+    playerWin = true;
+    narrative.textContent = 'You win!';
     flash(computerLifes[playerScore - 1]);
 
   } else {
     computerScore++;
-    computerWon = true;
+    computerWin = true;
+    narrative.textContent = 'You lose!';
     flash(playerLifes[5 - computerScore]);
   }
-  round++;
+  
   setTimeout(() => {
-    if (computerWon) {
+    if (computerWin) {
       stopFlash(playerLifes[5 - computerScore]);
       playerLifes[5 - computerScore].classList.add('dimmed');
       if (computerScore == 5) { playerAvatar.classList.add('dimmed'); };
 
-    } else if (playerWon) {
+    } else if (playerWin) {
       stopFlash(computerLifes[playerScore - 1]);
       computerLifes[playerScore - 1].classList.add('dimmed');
       if (playerScore == 5) { computerAvatar.classList.add('dimmed'); };
     }
-
     clearSelection();
-    playRound();
   }, 3 * 1000);
 }
 
 function clearSelection() {
-  playerWon = false;
-  computerWon = false;
+  playerWin = false;
+  computerWin = false;
   playerSelection.remove();
   computerSelection.remove();
   let selections = document.querySelectorAll('.hidden');
   selections.forEach(selection => {
     selection.classList.remove('hidden');
   });
+  playRound();
 }
 
 // typeIntroduction();
