@@ -36,21 +36,20 @@ let playerChoice;
 let computerSelection;
 let computerChoice;
 let round = 1;
-let playerWon = false;
-let computerWon = false;
+let playerScore = 0;
+let computerScore = 0;
 
 playRound();
 
 function playRound() {
-  if (round <= 5) {
-    selectChoice();
-  }
+  (playerScore == 5) ? console.log('Game over.') :
+  (computerScore == 5) ? console.log('Game over.') :
+  selectChoice();
 }
 
 function selectChoice() {
   choices.forEach((choice) => {
     choice.onclick = (e) => {
-      if (playerSelection) { clearSelection(); };
       playerSelection = e.target.cloneNode();
       playerPlay(e.target);
     };
@@ -80,18 +79,22 @@ function computerPlay() {
 
 function checkWinner(playerChoice, computerChoice) {
   if (playerChoice === computerChoice) {
-    console.log(`[Round: ${round}/5] It's a tie.`);
+    console.log(`[Round: ${round}] It's a tie.`);
 
-  } else if ((playerChoice === "paper" && computerChoice === "Rock") || (playerChoice === "rock" && computerChoice === "Scissors") || (playerChoice === "scissors" && computerChoice === "Paper")) {
-    playerWon = true;
-    console.log(`[Round: ${round}/5] You won! ${playerChoice} beats ${computerChoice}.`);
+  } else if ((playerChoice === "paper" && computerChoice === "rock") || (playerChoice === "rock" && computerChoice === "scissors") || (playerChoice === "scissors" && computerChoice === "paper")) {
+    playerScore++;
+    console.log(`[Round: ${round}] You won! ${playerChoice} beats ${computerChoice}.`);
 
   } else {
-    computerWon = true;
-    console.log(`[Round: ${round}/5] You lose! ${computerChoice} beats ${playerChoice}.`);
+    computerScore++;
+    console.log(`[Round: ${round}] You lose! ${computerChoice} beats ${playerChoice}.`);
   }
   round++;
-  playRound();
+  console.log(`player: ${playerScore}, computer: ${computerScore}`);
+  setTimeout(() => {
+    clearSelection();
+    playRound();
+  }, 3 * 1000);
 }
 
 function clearSelection() {
