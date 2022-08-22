@@ -47,7 +47,7 @@ const computerAvatar = document.querySelector('.computer-avatar');
 let playerWin = false;
 let computerWin = false;
 
-playGame();
+typeIntroduction();
 
 function playGame() {
   playRound();
@@ -56,7 +56,6 @@ function playGame() {
 }
 
 function playRound() {
-  narrative.textContent = '';
   round++;
   (playerScore == 5) ? playerWon() :
   (computerScore == 5) ? computerWon() :
@@ -66,6 +65,7 @@ function playRound() {
 function selectChoice() {
   choices.forEach((choice) => {
     choice.onclick = (e) => {
+      narrative.textContent = '';
       playerSelection = e.target.cloneNode();
       playerPlay(e.target);
     };
@@ -118,7 +118,7 @@ function checkWinner(playerChoice, computerChoice) {
         playerLifes.forEach(life => {
           life.classList.remove('dimmed');
         });
-      };
+      }
 
     } else if (playerWin) {
       stopFlash(computerLifes[playerScore - 1]);
@@ -127,7 +127,7 @@ function checkWinner(playerChoice, computerChoice) {
         computerLifes.forEach(life => {
           life.classList.remove('dimmed');
         });
-      };
+      }
     }
 
     clearSelection();
@@ -162,29 +162,27 @@ function computerWon() {
   narrative.textContent = 'Game over. You are the loser.';
 }
 
-// typeIntroduction();
-
 function displaySkipIntro() {
   skipIntro.textContent = 'Skip introduction';
   skipIntro.setAttribute('class', 'skip-intro');
-  body.insertBefore(skipIntro, header);
+  header.before(skipIntro);
   skipIntro.addEventListener('click', () => {
     skipIntro_clicked = true;
     if (timeoutId && narrative.textContent == guideText[el - 1]) {
-      type(guideText[10], 'none');
-      hideSkipIntro();
       clearTimeout(timeoutId);
       timeoutId = null;
+      type(guideText[10], playGame, 'enable');
+      hideSkipIntro();
     }
   });
 }
 
 function hideSkipIntro() {
   if (skipIntro_clicked) { skipIntro_clicked = false; }
-  skipIntro.classList.add('hidden');
+  skipIntro.remove();
 }
 
-function typeIntroduction(cb) {
+function typeIntroduction() {
   if (el == 0) {
     setTimeout(() => {
       type(guideText[el], typeIntroduction)
@@ -202,7 +200,7 @@ function typeIntroduction(cb) {
   if (el == halfIntro.length) {
     setTimeout(() => {
       stopFlash(exit);
-      cb(guideText[el], 'none', 'enable');
+      type(guideText[el], 'none', 'enable');
       hideSkipIntro();
     }, 3 * 1000);
   }
@@ -242,6 +240,7 @@ function flash(button) {
 
 function stopFlash(button) {
   clearInterval(intervalId);
+  intervalId = null;
   button.classList.remove('hidden');
 }
 
@@ -256,14 +255,14 @@ function type(text, cb, narrativeButtons = 'disable') {
       (function typeWriter() {
         if (skipIntro_clicked) {
           hideSkipIntro();
-          type(guideText[10], 'none');
+          type(guideText[10], playGame, 'enable');
         } else {
           if (i < text.length) {
             narrative.textContent += text.charAt(i);
             setTimeout(typeWriter, 100);
           }
           if (i == text.length) {
-            if (cb !== 'none') { cb(type); }
+            if (cb !== 'none') { cb(); }
           }
           i++;
         }
@@ -280,6 +279,7 @@ function type(text, cb, narrativeButtons = 'disable') {
             setTimeout(typeWriter, 100);
           }
         }
+
         if (i == text.length) {
           if (guideText.indexOf(text) <= 9) {  // 9 = End of introductory text
             next.addEventListener('click', typeNextText);
@@ -288,8 +288,11 @@ function type(text, cb, narrativeButtons = 'disable') {
               next.onmouseenter = () => stopFlash(next);
               next.onmouseleave = () => flash(next);
             }, 5 * 1000);
+          } else if (guideText.indexOf(text) == 10) {
+            cb();
           }
         }
+        
         i++;
       })();
       break;
@@ -298,12 +301,13 @@ function type(text, cb, narrativeButtons = 'disable') {
 
 let typeNextText = () => { 
   next.removeEventListener('click', typeNextText);
-  stopFlash(next);
-  next.onmouseenter = null;
-  next.onmouseleave = null;
-  clearTimeout(timeoutId);
+  if (timeoutId) {
+    stopFlash(next);
+    next.onmouseenter = null;
+    next.onmouseleave = null;
+    clearTimeout(timeoutId);
+    timeoutId = null;
+  }
   el++
   type(guideText[el], 'none', 'enable'); 
 };
-
-
