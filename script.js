@@ -11,7 +11,7 @@ const guideText = [
       '- Click the exit button to end the game',
       // End of the introductory text half
       'The rules are simple:',
-      "- The first to take all their opponent's lives is the winner",
+      "- The first to take all their opponent's lifes is the winner",
       "- And in case you didn't already know: rock beats scissors, scissors beats paper and paper beats rock",
       "That's all. Let's play!",
       // End of introductory text
@@ -29,6 +29,7 @@ let fastForward_clicked = false;
 let skipIntro_clicked = false;
 let timeoutId;
 let intervalId;
+let flashingButton;
 let el = 0; // Keep track of guideText's elements
 const choices = document.querySelectorAll('.rps');
 const computerBox = document.querySelector('.computer-box');
@@ -168,10 +169,16 @@ function displaySkipIntro() {
   header.before(skipIntro);
   skipIntro.addEventListener('click', () => {
     skipIntro_clicked = true;
+    if (intervalId) {
+      clearInterval(intervalId);
+      intervalId = null;
+      stopFlash(flashingButton);
+    }
+    // When typing text ends and next text is scheduled already
     if (timeoutId && narrative.textContent == guideText[el - 1]) {
       clearTimeout(timeoutId);
       timeoutId = null;
-      type(guideText[10], playGame, 'enable');
+      type(guideText[10], 'none', 'enable');
       hideSkipIntro();
     }
   });
@@ -185,16 +192,16 @@ function hideSkipIntro() {
 function typeIntroduction() {
   if (el == 0) {
     setTimeout(() => {
-      type(guideText[el], typeIntroduction)
-      el++
+      type(guideText[el], typeIntroduction);
+      el++;
       setTimeout(displaySkipIntro, 1 * 1000);
     }, 0);
   }
   if (el > 0 && el < halfIntro.length) {
     timeoutId = setTimeout(() => {
-      type(guideText[el], typeIntroduction)
+      type(guideText[el], typeIntroduction);
       flashButton();
-      el++
+      el++;
     }, 3 * 1000);
   }
   if (el == halfIntro.length) {
@@ -233,6 +240,7 @@ function flashButton() {
 }
 
 function flash(button) {
+  flashingButton = button;
   intervalId = setInterval(() => {
     button.classList.toggle('hidden');
   }, 500);
@@ -255,7 +263,7 @@ function type(text, cb, narrativeButtons = 'disable') {
       (function typeWriter() {
         if (skipIntro_clicked) {
           hideSkipIntro();
-          type(guideText[10], playGame, 'enable');
+          type(guideText[10], 'none', 'enable');
         } else {
           if (i < text.length) {
             narrative.textContent += text.charAt(i);
@@ -289,7 +297,7 @@ function type(text, cb, narrativeButtons = 'disable') {
               next.onmouseleave = () => flash(next);
             }, 5 * 1000);
           } else if (guideText.indexOf(text) == 10) {
-            cb();
+            playGame();
           }
         }
         
@@ -308,6 +316,6 @@ let typeNextText = () => {
     clearTimeout(timeoutId);
     timeoutId = null;
   }
-  el++
+  el++;
   type(guideText[el], 'none', 'enable'); 
 };
