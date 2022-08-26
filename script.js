@@ -41,18 +41,22 @@ let playerChoice;
 let computerSelection;
 let computerChoice;
 let round = 0;
-let playerScore = 0;
-let computerScore = 0;
-const playerLifes = document.querySelectorAll('.player-lifes>.heart');
+let playerScore;
+let computerScore;
+const playerLifes = Array.from(document.querySelectorAll('.player-lifes>.heart')).reverse();
 const computerLifes = document.querySelectorAll('.computer-lifes>.heart');
 const playerAvatar = document.querySelector('.player-avatar');
 const computerAvatar = document.querySelector('.computer-avatar');
 let playerWin = false;
 let computerWin = false;
+const winner = document.createElement('div');
+const start = document.createElement('button');
 
 typeIntroduction();
 
 function playGame() {
+  playerScore = 0;
+  computerScore = 0;
   fastForward.classList.add('dimmed');
   next.classList.add('dimmed');
   exit.classList.remove('dimmed');
@@ -114,13 +118,13 @@ function checkWinner(playerChoice, computerChoice) {
     computerScore++;
     computerWin = true;
     narrative.textContent = 'You lose!';
-    flash(playerLifes[5 - computerScore]);
+    flash(playerLifes[computerScore - 1]);
   }
   
   setTimeout(() => {
     if (computerWin) {
-      stopFlash(playerLifes[5 - computerScore]);
-      playerLifes[5 - computerScore].classList.add('dimmed');
+      stopFlash(playerLifes[computerScore - 1]);
+      playerLifes[computerScore - 1].classList.add('dimmed');
 
     } else if (playerWin) {
       stopFlash(computerLifes[playerScore - 1]);
@@ -152,10 +156,10 @@ function playerWon() {
     life.classList.remove('dimmed');
   });
   computerBox.classList.add('dimmed');
-  const winner = document.createElement('div');
   winner.textContent = 'PLAYER WON';
   computerBox.before(winner);
   narrative.textContent = 'Congratulations! You are the winner.';
+  setTimeout(startGame, 1 * 1000);
 }
 
 function computerWon() {
@@ -165,10 +169,10 @@ function computerWon() {
     life.classList.remove('dimmed');
   });
   playerBox.classList.add('dimmed');
-  const winner = document.createElement('div');
   winner.textContent = 'COMPUTER WON';
   computerBox.before(winner);
   narrative.textContent = 'Game over. You are the loser.';
+  setTimeout(startGame, 1 * 1000);
 }
 
 function endGame() {
@@ -185,9 +189,45 @@ function endGame() {
   computerWon();
 }
 
+function startGame() {
+  if (exit_clicked) exit_clicked = false;
+  start.textContent = 'START';
+  start.setAttribute('class', 'button');
+  header.before(start);
+  start.addEventListener('click', () => {
+    winner.remove();
+    narrative.textContent = '';
+    if (playerScore == 5 || computerScore == 5) {
+      clearGame();
+    } else { // Player gave up
+      playerBox.classList.remove('dimmed');
+    }
+    playGame();
+    start.remove();
+  });
+}
+
+function clearGame() {
+  if (playerScore == 5) {
+    computerBox.classList.remove('dimmed');
+    if (computerScore !== 0) {
+      for (let i = 0; i < computerScore; i++) {
+        playerLifes[i].classList.remove('dimmed');
+      }
+    }
+  } else { // Computer won
+    playerBox.classList.remove('dimmed');
+    if (playerScore !== 0) {
+      for (let i = 0; i < playerScore; i++) {
+        computerLifes[i].classList.remove('dimmed');
+      }
+    }
+  }
+}
+
 function displaySkipIntro() {
   skipIntro.textContent = 'Skip introduction';
-  skipIntro.setAttribute('class', 'skip-intro');
+  skipIntro.setAttribute('class', 'button');
   header.before(skipIntro);
   skipIntro.addEventListener('click', () => {
     skipIntro_clicked = true;

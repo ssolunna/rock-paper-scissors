@@ -149,7 +149,7 @@ footer {
   opacity: 0.3;
 }
 
-.skip-intro {
+.button {
   font-family: pixellari, 'Courier New', Courier, monospace;
   color: white;
   border: 2px solid white;
@@ -163,7 +163,7 @@ footer {
   transition: background-color 0.4s, color 0.4s;
 }
 
-.skip-intro:hover {
+.button:hover {
   background-color: white;
   color: black;
 }
