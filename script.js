@@ -25,7 +25,9 @@ const exit = document.querySelector('.exit-button');
 const body = document.querySelector('body');
 const header = document.querySelector('header');
 const skipIntro = document.createElement('button');
+let exit_clicked = false;
 let fastForward_clicked = false;
+fastForward.addEventListener('click', () => fastForward_clicked = true);
 let skipIntro_clicked = false;
 let timeoutId;
 let intervalId;
@@ -51,9 +53,13 @@ let computerWin = false;
 typeIntroduction();
 
 function playGame() {
-  playRound();
-  next.classList.add('dimmed');
   fastForward.classList.add('dimmed');
+  next.classList.add('dimmed');
+  exit.classList.remove('dimmed');
+  exit.onclick = () => {
+    if (confirm('Do you want to end the game?')) endGame();
+  };
+  playRound();
 }
 
 function playRound() {
@@ -115,23 +121,16 @@ function checkWinner(playerChoice, computerChoice) {
     if (computerWin) {
       stopFlash(playerLifes[5 - computerScore]);
       playerLifes[5 - computerScore].classList.add('dimmed');
-      if (computerScore == 5) {
-        playerLifes.forEach(life => {
-          life.classList.remove('dimmed');
-        });
-      }
 
     } else if (playerWin) {
       stopFlash(computerLifes[playerScore - 1]);
       computerLifes[playerScore - 1].classList.add('dimmed');
-      if (playerScore == 5) {
-        computerLifes.forEach(life => {
-          life.classList.remove('dimmed');
-        });
-      }
     }
 
-    clearSelection();
+    if (!exit_clicked) {
+      clearSelection();
+      playRound();
+    }
   }, 2 * 1000);
 }
 
@@ -144,10 +143,14 @@ function clearSelection() {
   selections.forEach(selection => {
     selection.classList.remove('hidden');
   });
-  playRound();
 }
 
 function playerWon() {
+  exit.onclick = null;
+  exit.classList.add('dimmed');
+  computerLifes.forEach(life => {
+    life.classList.remove('dimmed');
+  });
   computerBox.classList.add('dimmed');
   const winner = document.createElement('div');
   winner.textContent = 'PLAYER WON';
@@ -156,11 +159,30 @@ function playerWon() {
 }
 
 function computerWon() {
+  exit.onclick = null;
+  exit.classList.add('dimmed');
+  playerLifes.forEach(life => {
+    life.classList.remove('dimmed');
+  });
   playerBox.classList.add('dimmed');
   const winner = document.createElement('div');
   winner.textContent = 'COMPUTER WON';
   computerBox.before(winner);
   narrative.textContent = 'Game over. You are the loser.';
+}
+
+function endGame() {
+  exit_clicked = true;
+  exit.onclick = null;
+  choices.forEach((choice) => choice.onclick = null);
+  if (playerSelection) clearSelection();
+  if (flashingButton) stopFlash(flashingButton);
+  if (playerScore !== 0) {
+    for (let i = 0; i < playerScore; i++) {
+      computerLifes[i].classList.remove('dimmed');
+    }
+  }
+  computerWon();
 }
 
 function displaySkipIntro() {
@@ -207,6 +229,7 @@ function typeIntroduction() {
   if (el == halfIntro.length) {
     setTimeout(() => {
       stopFlash(exit);
+      exit.classList.add('dimmed');
       type(guideText[el], 'none', 'enable');
       hideSkipIntro();
     }, 3 * 1000);
@@ -247,12 +270,11 @@ function flash(button) {
 }
 
 function stopFlash(button) {
+  flashingButton = null;
   clearInterval(intervalId);
   intervalId = null;
   button.classList.remove('hidden');
 }
-
-fastForward.addEventListener('click', () => fastForward_clicked = true);
 
 function type(text, cb, narrativeButtons = 'disable') {
   let i = 0;
